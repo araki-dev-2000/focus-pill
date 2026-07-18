@@ -1,0 +1,15 @@
+appId: com.focuspill.app
+productName: FocusPill
+directories:
+  output: dist/installer
+files:
+  - dist/main/**
+  - dist/preload/**
+  - dist/renderer/**
+win:
+  target:
+    - target: portable
+      arch: [x64]
+  icon: assets/icon.ico
+portable:
+  artifactName: FocusPill-${version}-portable.exe
