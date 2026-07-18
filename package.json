@@ -20,5 +20,25 @@
   "homepage": "https://github.com/araki-dev-2000/focus-pill#readme",
   "volta": {
     "node": "24.18.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "concurrently": "^10.0.3",
+    "electron": "^43.1.1",
+    "electron-builder": "^26.15.3",
+    "postcss": "^8.5.19",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.5",
+    "wait-on": "^9.0.10"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "electron-store": "^11.0.2",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   }
 }
