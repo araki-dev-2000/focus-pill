@@ -15,30 +15,30 @@ const eslintConfig = defineConfig([
   globalIgnores([
     "dist/**",
     "eslint.config.mjs",
-    "src/renderer/shared/components/ui/**", // Shadcn UIコンポーネントは自動生成されるため基本的には編集は控える
+    "src/renderer/shared/components/ui/**", // shadcn/ui generated components are auto-generated, so avoid editing them in general
   ]),
 
   { settings: { react: { version: "19" } } },
 
-  // Main / Preload プロセス（Node.js実行環境）
+  // Main / Preload process (Node.js runtime environment)
   {
     files: ["src/main/**/*.ts", "src/preload/**/*.ts"],
     languageOptions: { globals: globals.node },
   },
 
-  // Renderer（ブラウザ実行環境）
+  // Renderer (browser runtime environment)
   {
     files: ["src/renderer/**/*.{ts,tsx}"],
     languageOptions: { globals: globals.browser },
   },
 
-  // ビルド設定ファイル（Node.js実行環境）
+  // Build config files (Node.js runtime environment)
   {
     files: ["*.config.{ts,mjs,js}"],
     languageOptions: { globals: globals.node },
   },
 
-  // TypeScript ファイル専用
+  // TypeScript files only
   {
     files: ["**/*.ts", "**/*.tsx"],
     rules: {
@@ -46,45 +46,45 @@ const eslintConfig = defineConfig([
       // TypeScript
       // -----------------------------------------------------------------------
 
-      // anyの使用を禁止（コメントで理由を明記すれば警告のみ）
+      // Disallow use of any (warn only, if the reason is documented in a comment)
       "@typescript-eslint/no-explicit-any": "warn",
 
-      // 型アサーション（as）の使用を制限
+      // Restrict use of type assertions (as)
       "@typescript-eslint/consistent-type-assertions": [
         "warn",
         { assertionStyle: "never" },
       ],
 
-      // 型注釈を強制（引数・戻り値）
+      // Enforce type annotations (parameters / return values)
       "@typescript-eslint/explicit-function-return-type": [
         "warn",
         {
-          allowExpressions: true,       // アロー関数は除外
+          allowExpressions: true,       // Exclude arrow functions
           allowHigherOrderFunctions: true,
         },
       ],
 
       // -----------------------------------------------------------------------
-      // 命名規則
+      // Naming conventions
       // -----------------------------------------------------------------------
       "@typescript-eslint/naming-convention": [
         "error",
-        // 型・インターフェースはパスカルケース
+        // Types and interfaces are PascalCase
         {
           selector: ["typeLike"],
           format: ["PascalCase"],
         },
-        // 変数はcamelCase（定数のアッパースネークケースも許可）
+        // Variables are camelCase (UPPER_CASE constants also allowed)
         {
           selector: "variable",
           format: ["camelCase", "UPPER_CASE", "PascalCase"],
         },
-        // 関数はcamelCase
+        // Functions are camelCase
         {
           selector: "function",
-          format: ["camelCase", "PascalCase"], // Reactコンポーネントはパスカルケース
+          format: ["camelCase", "PascalCase"], // React components are PascalCase
         },
-        // boolean型の変数はis/has/canで始める
+        // Boolean variables start with is/has/can
         {
           selector: "variable",
           types: ["boolean"],
@@ -93,47 +93,47 @@ const eslintConfig = defineConfig([
         },
       ],
 
-      // 未使用変数を警告
+      // Warn on unused variables
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
-          argsIgnorePattern: "^_",  // _始まりの引数は無視
+          argsIgnorePattern: "^_",  // Ignore arguments starting with _
           varsIgnorePattern: "^_",
         },
       ],
     },
   },
 
-  // 全ファイル共通ルール
+  // Rules common to all files
   {
     rules: {
-      // セミコロンを禁止
+      // Disallow semicolons
       semi: ["error", "never"],
 
-      // インデントをスペース2つに統一
+      // Enforce 2-space indentation
       indent: ["error", 2, { SwitchCase: 1 }],
 
       // -----------------------------------------------------------------------
       // React
       // -----------------------------------------------------------------------
 
-      // propsの型定義を強制
-      "react/prop-types": "off", // TypeScriptで代替するためoff
+      // Enforce prop type definitions
+      "react/prop-types": "off", // Off because TypeScript handles this instead
 
-      // コンポーネントの関数スタイルを統一（関数コンポーネントのみ）
+      // Enforce a consistent component function style (function components only)
       "react/function-component-definition": [
         "error",
         {
-          namedComponents: "function-declaration",       // トップレベルはfunction
-          unnamedComponents: "arrow-function",           // それ以外はアロー関数
+          namedComponents: "function-declaration",       // Top-level components use function
+          unnamedComponents: "arrow-function",           // Everything else uses arrow functions
         },
       ],
 
       // -----------------------------------------------------------------------
-      // 共通
+      // Common
       // -----------------------------------------------------------------------
 
-      // console.logを警告（本番コードに残さない）
+      // Warn on console.log (don't leave it in production code)
       "no-console": ["warn", { allow: ["warn", "error"] }],
     },
   },
