@@ -1,0 +1,60 @@
+{
+  "name": "focus-pill",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/main/index.js",
+  "scripts": {
+    "dev": "concurrently \"vite --config vite.pill.config.ts\" \"vite --config vite.panel.config.ts\" \"wait-on tcp:5173 tcp:5174 && electron .\"",
+    "build:renderer": "vite build --config vite.pill.config.ts && vite build --config vite.panel.config.ts",
+    "build:main": "tsc -p tsconfig.node.json",
+    "build": "npm run build:renderer && npm run build:main && electron-builder",
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/araki-dev-2000/focus-pill.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/araki-dev-2000/focus-pill/issues"
+  },
+  "homepage": "https://github.com/araki-dev-2000/focus-pill#readme",
+  "volta": {
+    "node": "24.18.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "concurrently": "^10.0.3",
+    "electron": "^43.1.1",
+    "electron-builder": "^26.15.3",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.7.0",
+    "postcss": "^8.5.19",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~5.7.0",
+    "typescript-eslint": "^8.64.0",
+    "vite": "^8.1.5",
+    "wait-on": "^9.0.10"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@radix-ui/react-scroll-area": "^1.2.14",
+    "@radix-ui/react-slot": "^1.3.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "electron-store": "^11.0.2",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tailwind-merge": "^3.6.0"
+  }
+}
