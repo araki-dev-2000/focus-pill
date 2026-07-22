@@ -165,7 +165,7 @@ interface Task {
   id: string;        // crypto.randomUUID()
   title: string;
   status: TaskStatus;
-  order: number;     // standby タスクのスタンバイ内順序（now/next は status で識別するため不要）
+  order: number;     // 全タスク共通の並び順
   createdAt: string; // ISO 8601
 }
 

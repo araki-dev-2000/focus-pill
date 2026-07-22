@@ -41,6 +41,13 @@ const eslintConfig = defineConfig([
   // TypeScript files only
   {
     files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        // naming-convention's `types: ["boolean"]` selector needs type information to work
+        project: ["./tsconfig.json", "./tsconfig.node.json", "./tsconfig.eslint.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
     rules: {
       // -----------------------------------------------------------------------
       // TypeScript
