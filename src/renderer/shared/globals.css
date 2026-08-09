@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/*
+ * The pill and panel renderers each build from their own Vite root
+ * (src/renderer/pill, src/renderer/panel), which scopes Tailwind's
+ * automatic content detection to that subtree. This sibling directory
+ * holds classes used only here (e.g. shadcn/ui components), so it has
+ * to be added explicitly or those utilities never get generated.
+ */
+@source "./components";
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
