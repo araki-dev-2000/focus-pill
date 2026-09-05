@@ -2,6 +2,10 @@
 <!-- Briefly describe what this PR does and why -->
 
 
+## Related Issue
+<!-- e.g. "Fixes #12" to auto-close the issue on merge, or "Related to #12" to link without closing -->
+
+
 ## Type of change
 <!-- Mark the ones that apply with an x -->
 - [ ] feat (new feature)
