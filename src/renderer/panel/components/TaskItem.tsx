@@ -30,6 +30,7 @@ export function TaskItem({ task, variant }: TaskItemProps): ReactElement {
   const [isEditing, setIsEditing] = useState(false)
   const [draftTitle, setDraftTitle] = useState(task.title)
   const [isRestoreMenuOpen, setIsRestoreMenuOpen] = useState(false)
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false)
   const restoreMenuRef = useRef<HTMLDivElement>(null)
 
   const {
@@ -111,10 +112,18 @@ export function TaskItem({ task, variant }: TaskItemProps): ReactElement {
   }
 
   /**
-   * Deletes the task.
+   * Opens the delete confirmation modal.
    */
-  const handleDelete = (): void => {
+  const handleDeleteClick = (): void => {
+    setIsDeleteAlertOpen(true)
+  }
+
+  /**
+   * Confirms deletion, removing the task and closing the modal.
+   */
+  const confirmDelete = (): void => {
     void window.taskAPI.delete(task.id)
+    setIsDeleteAlertOpen(false)
   }
 
   /**
@@ -218,10 +227,33 @@ export function TaskItem({ task, variant }: TaskItemProps): ReactElement {
         variant="ghost"
         className="h-7 w-7 text-destructive"
         aria-label="Delete task"
-        onClick={handleDelete}
+        onClick={handleDeleteClick}
       >
         🗑
       </Button>
+
+      {isDeleteAlertOpen && (
+        <div className="fixed inset-0 z-20 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-xs rounded-md border border-border bg-popover p-4 shadow-md">
+            <p className="text-sm">
+              Delete &ldquo;<span className="font-medium">{task.title}</span>&rdquo;?
+            </p>
+            <div className="mt-3 flex justify-end gap-2">
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => setIsDeleteAlertOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="button" size="sm" variant="destructive" onClick={confirmDelete}>
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
