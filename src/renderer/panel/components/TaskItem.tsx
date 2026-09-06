@@ -163,10 +163,12 @@ export function TaskItem({ task, variant }: TaskItemProps): ReactElement {
           onBlur={commitEdit}
           onKeyDown={handleEditKeyDown}
           maxLength={MAX_TITLE_LENGTH}
-          className="h-7 flex-1"
+          className="h-7 max-w-28 min-w-0 flex-1"
         />
       ) : (
-        <span className="min-w-0 flex-1 truncate text-sm">{task.title}</span>
+        <span title={task.title} className="max-w-28 min-w-0 flex-1 truncate text-sm">
+          {task.title}
+        </span>
       )}
 
       {isActive ? (
@@ -175,7 +177,7 @@ export function TaskItem({ task, variant }: TaskItemProps): ReactElement {
             type="button"
             size="icon"
             variant="ghost"
-            className="h-7 w-7"
+            className="ml-auto h-7 w-7"
             aria-label="Complete task"
             onClick={handleComplete}
           >
@@ -193,7 +195,7 @@ export function TaskItem({ task, variant }: TaskItemProps): ReactElement {
           </Button>
         </>
       ) : (
-        <div ref={restoreMenuRef} className="relative">
+        <div ref={restoreMenuRef} className="relative ml-auto">
           <Button
             type="button"
             size="icon"
