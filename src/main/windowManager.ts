@@ -2,8 +2,8 @@ import { BrowserWindow, app, screen } from 'electron'
 import path from 'node:path'
 import type { Display, Rectangle } from 'electron'
 
-const PILL_WIDTH = 280
-const PILL_HEIGHT = 64
+const PILL_WIDTH = 300
+const PILL_HEIGHT = 116
 const PILL_MARGIN = 16
 
 const PANEL_WIDTH = 320
