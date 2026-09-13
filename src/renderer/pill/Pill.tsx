@@ -45,15 +45,10 @@ export function Pill(): ReactElement {
       <button
         type="button"
         onClick={handleClick}
-        className="flex h-full w-full flex-col justify-center gap-1 rounded-2xl border border-border/50 bg-background/80 px-4 py-2 text-left shadow-lg backdrop-blur-md transition-colors hover:bg-background/90"
+        className="flex h-full w-full items-center gap-3 rounded-2xl border border-border/50 bg-background/80 px-4 py-2 text-left shadow-lg backdrop-blur-md transition-colors hover:bg-background/90"
       >
-        <div className="flex shrink-0 flex-col items-end">
-          <span className="text-sm font-medium text-foreground">{clock.time}</span>
-          <span className="text-xs text-muted-foreground">{clock.date}</span>
-        </div>
-        <div className="shrink-0 border-t border-border/50" />
         {hasTasks ? (
-          <div className="flex min-w-0 flex-col gap-1">
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
             <div className="flex min-w-0 items-center gap-2">
               <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-500" />
               <span className="shrink-0 text-xs font-semibold text-emerald-600">Now</span>
@@ -69,8 +64,13 @@ export function Pill(): ReactElement {
             </div>
           </div>
         ) : (
-          <span className="text-center text-sm text-muted-foreground">— No tasks —</span>
+          <span className="min-w-0 flex-1 text-center text-sm text-muted-foreground">— No tasks —</span>
         )}
+        <div className="h-full shrink-0 border-l border-border/50" />
+        <div className="flex shrink-0 flex-col items-end">
+          <span className="text-sm font-medium text-foreground">{clock.time}</span>
+          <span className="text-xs text-muted-foreground">{clock.date}</span>
+        </div>
       </button>
     </div>
   )
