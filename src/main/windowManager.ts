@@ -55,17 +55,27 @@ function getPillBounds(display: Display): Rectangle {
 
 /**
  * Computes the panel window's bounds: right-aligned with and directly below the pill.
- * @param display - Display to position the panel on.
+ * @param pillBounds - The pill window's current bounds to anchor the panel to.
  * @returns Target bounds for the panel window.
  */
-function getPanelBounds(display: Display): Rectangle {
-  const pillBounds = getPillBounds(display)
+function getPanelBounds(pillBounds: Rectangle): Rectangle {
   return {
-    x: pillBounds.x + PILL_WIDTH - PANEL_WIDTH,
-    y: pillBounds.y + PILL_HEIGHT,
+    x: pillBounds.x + pillBounds.width - PANEL_WIDTH,
+    y: pillBounds.y + pillBounds.height,
     width: PANEL_WIDTH,
     height: PANEL_HEIGHT,
   }
+}
+
+/**
+ * Returns the pill window's current bounds, or its default corner bounds if it
+ * has not been created yet.
+ */
+function getCurrentPillBounds(): Rectangle {
+  if (pillWindow && !pillWindow.isDestroyed()) {
+    return pillWindow.getBounds()
+  }
+  return getPillBounds(getAnchorDisplay())
 }
 
 /**
@@ -79,7 +89,7 @@ function repositionWindows(): void {
     pillWindow.setBounds(getPillBounds(display))
   }
   if (panelWindow && !panelWindow.isDestroyed()) {
-    panelWindow.setBounds(getPanelBounds(display))
+    panelWindow.setBounds(getPanelBounds(getCurrentPillBounds()))
   }
 }
 
@@ -149,7 +159,7 @@ export function createPanelWindow(): BrowserWindow {
   }
 
   const win = new BrowserWindow({
-    ...getPanelBounds(getAnchorDisplay()),
+    ...getPanelBounds(getCurrentPillBounds()),
     frame: false,
     transparent: true,
     alwaysOnTop: true,
@@ -199,7 +209,7 @@ export function getPanelWindow(): BrowserWindow | null {
  */
 export function showPanelWindow(): void {
   const win = panelWindow ?? createPanelWindow()
-  win.setBounds(getPanelBounds(getAnchorDisplay()))
+  win.setBounds(getPanelBounds(getCurrentPillBounds()))
   win.show()
 }
 
@@ -210,4 +220,41 @@ export function hidePanelWindow(): void {
   if (panelWindow && !panelWindow.isDestroyed()) {
     panelWindow.hide()
   }
+}
+
+let pillDragStartBounds: Rectangle | null = null
+
+/**
+ * Records the pill window's bounds at the start of a manual drag gesture,
+ * so `movePillDrag` can apply offsets relative to a fixed origin.
+ */
+export function startPillDrag(): void {
+  if (pillWindow && !pillWindow.isDestroyed()) {
+    pillDragStartBounds = pillWindow.getBounds()
+  }
+}
+
+/**
+ * Moves the pill window to its drag-start position offset by the given amount.
+ * No-op if `startPillDrag` was not called first.
+ * @param deltaX - Horizontal offset from the drag's start position, in screen pixels.
+ * @param deltaY - Vertical offset from the drag's start position, in screen pixels.
+ */
+export function movePillDrag(deltaX: number, deltaY: number): void {
+  if (!pillDragStartBounds || !pillWindow || pillWindow.isDestroyed()) {
+    return
+  }
+  pillWindow.setBounds({
+    x: pillDragStartBounds.x + deltaX,
+    y: pillDragStartBounds.y + deltaY,
+    width: pillDragStartBounds.width,
+    height: pillDragStartBounds.height,
+  })
+}
+
+/**
+ * Clears the drag-start bounds recorded by `startPillDrag`, ending the gesture.
+ */
+export function endPillDrag(): void {
+  pillDragStartBounds = null
 }

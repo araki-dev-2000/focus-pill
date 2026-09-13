@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
-import type { ReactElement } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import type { MouseEvent as ReactMouseEvent, ReactElement } from 'react'
 import type { Task } from '../../types/task'
+
+const DRAG_THRESHOLD_PX = 4
 
 /**
  * Formats a Date into the pill's clock display strings.
@@ -34,7 +36,45 @@ export function Pill(): ReactElement {
   const nextTask = tasks.find((task) => task.status === 'next')
   const hasTasks = Boolean(nowTask || nextTask)
 
+  const dragOriginRef = useRef<{ x: number; y: number } | null>(null)
+  const didDragRef = useRef(false)
+
+  const handleMouseMove = (event: MouseEvent): void => {
+    const origin = dragOriginRef.current
+    if (!origin) {
+      return
+    }
+    const deltaX = event.screenX - origin.x
+    const deltaY = event.screenY - origin.y
+    if (!didDragRef.current && Math.hypot(deltaX, deltaY) < DRAG_THRESHOLD_PX) {
+      return
+    }
+    didDragRef.current = true
+    window.pillAPI.dragMove(deltaX, deltaY)
+  }
+
+  const handleMouseUp = (): void => {
+    dragOriginRef.current = null
+    window.removeEventListener('mousemove', handleMouseMove)
+    window.removeEventListener('mouseup', handleMouseUp)
+    window.pillAPI.dragEnd()
+  }
+
+  const handleMouseDown = (event: ReactMouseEvent<HTMLButtonElement>): void => {
+    if (event.button !== 0) {
+      return
+    }
+    dragOriginRef.current = { x: event.screenX, y: event.screenY }
+    didDragRef.current = false
+    window.pillAPI.dragStart()
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
+  }
+
   const handleClick = (): void => {
+    if (didDragRef.current) {
+      return
+    }
     window.panelAPI.open()
   }
 
@@ -44,6 +84,7 @@ export function Pill(): ReactElement {
     <div className="flex h-screen w-screen items-center p-2">
       <button
         type="button"
+        onMouseDown={handleMouseDown}
         onClick={handleClick}
         className="flex h-full w-full items-center gap-3 rounded-2xl border border-border/50 bg-background/80 px-4 py-2 text-left shadow-lg backdrop-blur-md transition-colors hover:bg-background/90"
       >

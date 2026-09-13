@@ -1,6 +1,14 @@
 import { ipcMain } from 'electron'
 import { addTask, deleteTask, getAllTasks, reorderTasks, updateTask } from './taskStore'
-import { getPanelWindow, getPillWindow, hidePanelWindow, showPanelWindow } from './windowManager'
+import {
+  endPillDrag,
+  getPanelWindow,
+  getPillWindow,
+  hidePanelWindow,
+  movePillDrag,
+  showPanelWindow,
+  startPillDrag,
+} from './windowManager'
 import type { Task, TaskUpdatePatch } from '../types/task'
 
 /**
@@ -50,4 +58,8 @@ export function registerIpcHandlers(): void {
 
   ipcMain.on('panel:open', () => showPanelWindow())
   ipcMain.on('panel:close', () => hidePanelWindow())
+
+  ipcMain.on('pill:dragStart', () => startPillDrag())
+  ipcMain.on('pill:dragMove', (_event, deltaX: number, deltaY: number) => movePillDrag(deltaX, deltaY))
+  ipcMain.on('pill:dragEnd', () => endPillDrag())
 }

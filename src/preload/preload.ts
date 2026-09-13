@@ -17,7 +17,15 @@ const panelAPI = {
   close: () => ipcRenderer.send('panel:close'),
 }
 
+const pillAPI = {
+  dragStart: () => ipcRenderer.send('pill:dragStart'),
+  dragMove: (deltaX: number, deltaY: number) => ipcRenderer.send('pill:dragMove', deltaX, deltaY),
+  dragEnd: () => ipcRenderer.send('pill:dragEnd'),
+}
+
 contextBridge.exposeInMainWorld('taskAPI', taskAPI)
 contextBridge.exposeInMainWorld('panelAPI', panelAPI)
+contextBridge.exposeInMainWorld('pillAPI', pillAPI)
 
 export type PanelAPI = typeof panelAPI
+export type PillAPI = typeof pillAPI
